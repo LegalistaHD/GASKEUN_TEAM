@@ -1,0 +1,6 @@
+streamlit
+matplotlib
+validators==0.22.0
+st-gsheets-connection
+streamlit-option-menu
+scikit-learn
