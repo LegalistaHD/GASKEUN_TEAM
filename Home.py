@@ -203,30 +203,23 @@ if selection == "Recommendation":
     st.title("Recommendation")
      
     st.subheader('', divider='rainbow')
-    df['Original price'] = df['Original price'].str.replace('Rp', '').str.replace(',', '.','.').astype(float)
-    
-    # Sidebar
-    kolom_tertentu = ['Hotel Name', 'Rating', 'Original price'] 
-    
-    data_hotel = df
+
+    # Preprocess 'Original price' column
+    df['Original price'] = df['Original price'].str.replace('Rp', '').str.replace('.', '').str.replace(',', '.').astype(float)
 
     st.header('Rekomendasi Hotel')
-    st.write("(Under Maintenance 🛠️)")
-    rating = st.slider('Masukkan Rating (0.0-10.0)', 0.0, 10.0, 7.0)
+    rating = st.slider('Masukkan Rating (0.0-10.0)', 0.00, 10.00, 7.00)
     harga = st.slider('Masukkan Harga', 0.0, 15000000.0, 5022000.0)
 
     # Tombol "Cari Rekomendasi"
     if st.button('Cari Rekomendasi'):
         # Simpan data input pengguna dalam variabel
-        input_pengguna = {'Rating': rating, 'Original price': harga}
-        
+        input_pengguna = {'Rate': rating, 'Price': harga}
         # Filter data hotel berdasarkan rating dan harga yang diinginkan
-        filtered_hotels = data_hotel[(data_hotel['Rating'] >= input_pengguna['Rating']) & (data_hotel['Original price'] <= input_pengguna['Original price'])]
-
+        filtered_hotels = df[(df['Rating'] >= input_pengguna['Rate']) & (df['Original price'] <= input_pengguna['Price'])]
         # Jika ada hotel yang sesuai, ambil 5 hotel pertama sebagai rekomendasi
         if not filtered_hotels.empty:
-            recommended_hotels = filtered_hotels.head(5)
             st.subheader('Rekomendasi Hotel:')
-            st.dataframe(recommended_hotels)
+            st.dataframe(filtered_hotels)
         else:
-            st.subheader('Maaf, tidak ada hotel yang sesuai dengan kriteria Anda.')
+            st.warning('Maaf, tidak ada hotel yang sesuai dengan kriteria Anda.')
